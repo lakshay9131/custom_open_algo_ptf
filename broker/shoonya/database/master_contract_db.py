@@ -340,6 +340,10 @@ def process_shoonya_nfo_data(output_path):
     # Apply the expiry date format
     df["expiry"] = df["expiry"].apply(format_expiry_date)
 
+	# Ensure no string 'nan' or empty values slip into brsymbol or symbol (added 3 aug 2026)
+    df = df[df["brsymbol"].astype(str).str.lower() != "nan"]
+    df = df[df["brsymbol"].astype(str).str.strip() != ""]
+
     # Replace the 'XX' option type with 'FUT' for futures
     df["instrumenttype"] = df.apply(
         lambda row: "FUT" if row["optiontype"] == "XX" else row["optiontype"], axis=1
