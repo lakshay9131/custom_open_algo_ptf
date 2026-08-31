@@ -48,10 +48,13 @@ def map_order_data(order_data):
     # Check if 'data' is None
     # if order_data has key 'data' and its value is None
 
+    print(f"RAW KOTAK ORDER RESPONSE: {order_data}")
+    
     if order_data["stat"] == "Not_Ok":
         logger.debug("No data available.")
         order_data = {}  # or set it to an empty list if it's supposed to be a list
         return order_data
+        
 
     if order_data["data"] is None:
         # Handle the case where there is no data
