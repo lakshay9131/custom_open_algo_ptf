@@ -175,6 +175,7 @@ def place_order_api(data, auth_token):
     try:
         response = client.post(url, headers=headers, content=payload)
         logger.debug(f"PLACE ORDER API Response: {response.status_code} {response.text}")
+        print("PLACE ORDER API Response",response)
 
         # Add status attribute for compatibility with the existing codebase
         response.status = response.status_code
