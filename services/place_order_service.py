@@ -348,6 +348,7 @@ def place_order(
 
     # Case 1: API-based authentication
     if api_key and not (auth_token and broker):
+        print("Order Valid 1")
         AUTH_TOKEN, broker_name = get_auth_token_broker(api_key)
         if AUTH_TOKEN is None:
             error_response = {"status": "error", "message": "Invalid openalgo apikey"}
@@ -357,9 +358,10 @@ def place_order(
         return place_order_with_auth(
             order_data, AUTH_TOKEN, broker_name, original_data, emit_event, prefetched_quote
         )
-
+    
     # Case 2: Direct internal call with auth_token and broker
     elif auth_token and broker:
+        print("Order Valid 2")
         return place_order_with_auth(
             order_data, auth_token, broker, original_data, emit_event, prefetched_quote
         )
