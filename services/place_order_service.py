@@ -197,10 +197,11 @@ def place_order_with_auth(
             )
 
         return success, response, status_code
-
+    print("Order Valid Auth 1")
     # If not in analyze mode, proceed with actual order placement
     broker_module = import_broker_module(broker)
     if broker_module is None:
+        print("Order Valid Auth 1 Broker Module not found")
         error_response = {"status": "error", "message": "Broker-specific module not found"}
         bus.publish(
             OrderFailedEvent(
@@ -219,6 +220,7 @@ def place_order_with_auth(
     try:
         res, response_data, order_id = broker_module.place_order_api(order_data, auth_token)
     except Exception as e:
+        print("Order Valid Auth 2 ",e)
         logger.exception(f"Error in broker_module.place_order_api: {e}")
         error_response = {
             "status": "error",
@@ -354,6 +356,7 @@ def place_order(
             error_response = {"status": "error", "message": "Invalid openalgo apikey"}
             # Skip logging for invalid API keys to prevent database flooding
             return False, error_response, 403
+        print("Order Valid 1 2")
 
         return place_order_with_auth(
             order_data, AUTH_TOKEN, broker_name, original_data, emit_event, prefetched_quote
