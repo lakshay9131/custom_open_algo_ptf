@@ -323,10 +323,13 @@ def place_order(
 
         if should_route_to_pending(api_key, "placeorder"):
             return queue_order(api_key, original_data, "placeorder")
+    print("Order received",order_data)
 
     # Validate the order data
     is_valid, _, error_message = validate_order_data(order_data)
+    print("Order Valid",is_valid)
     if not is_valid:
+        print("Order InValid",error_message)
         if get_analyze_mode():
             return False, emit_analyzer_error(original_data, error_message), 400
         error_response = {"status": "error", "message": error_message}
