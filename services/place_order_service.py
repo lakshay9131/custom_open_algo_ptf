@@ -200,6 +200,7 @@ def place_order_with_auth(
     print("Order Valid Auth 1")
     # If not in analyze mode, proceed with actual order placement
     broker_module = import_broker_module(broker)
+    print("Order Valid Auth 1+")
     if broker_module is None:
         print("Order Valid Auth 1 Broker Module not found")
         error_response = {"status": "error", "message": "Broker-specific module not found"}
@@ -264,6 +265,7 @@ def place_order_with_auth(
 
         return True, order_response_data, 200
     else:
+        print("Order Valid Auth3  ",res)
         message = (
             response_data.get("message", "Failed to place order")
             if isinstance(response_data, dict)
