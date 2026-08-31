@@ -265,7 +265,7 @@ def place_order_with_auth(
 
         return True, order_response_data, 200
     else:
-        print("Order Valid Auth3  ",res)
+        print("Order Valid Auth3  ",res,response_data)
         message = (
             response_data.get("message", "Failed to place order")
             if isinstance(response_data, dict)
