@@ -1,4 +1,5 @@
 import os
+import time
 
 from flask import jsonify, make_response, request
 from flask_restx import Namespace, Resource
@@ -25,6 +26,7 @@ class History(Resource):
     @limiter.limit(API_RATE_LIMIT)
     def post(self):
         """Get historical data for given symbol"""
+        request_started_at = time.perf_counter()
         try:
             # Validate request data
             history_data = history_schema.load(request.json)
@@ -48,7 +50,27 @@ class History(Resource):
                 source=source,
             )
 
-            return make_response(jsonify(response_data), status_code)
+            before_response_ms = (time.perf_counter() - request_started_at) * 1000
+            logger.info(
+                "History request service completed in %.2f ms (symbol=%s, exchange=%s, source=%s)",
+                before_response_ms,
+                symbol,
+                exchange,
+                source,
+            )
+
+            response = make_response(jsonify(response_data), status_code)
+            total_request_ms = (time.perf_counter() - request_started_at) * 1000
+            logger.info(
+                "History request completed in %.2f ms (response construction: %.2f ms, status=%s, symbol=%s, exchange=%s, source=%s)",
+                total_request_ms,
+                total_request_ms - before_response_ms,
+                status_code,
+                symbol,
+                exchange,
+                source,
+            )
+            return response
 
         except ValidationError as err:
             return make_response(jsonify({"status": "error", "message": err.messages}), 400)

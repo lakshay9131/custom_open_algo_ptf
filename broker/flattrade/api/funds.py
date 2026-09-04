@@ -40,6 +40,7 @@ def fetch_data(endpoint, payload, headers, client, retry_count=0):
     url = f"https://piconnect.flattrade.in{endpoint}"
     response = client.post(url, content=payload, headers=headers)
     parsed = response.json()
+    print(f"Fetched data from {endpoint}: {parsed}")
 
     # A funds call can be the first request to meet a lower ceiling. Without
     # this it returns a rejection that get_margin_data reads as empty funds and
@@ -68,7 +69,7 @@ def get_margin_data(auth_token):
 
     # Fetch margin data
     margin_data = fetch_data("/PiConnectAPI/Limits", payload, headers, client)
-
+    print(f"Fetched margin data: {margin_data}")
     # Check if the request was successful
     if margin_data.get("stat") != "Ok":
         # Log the error or return an empty dictionary to indicate failure
